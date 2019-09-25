@@ -1,0 +1,34 @@
+{
+  "name": "lydia",
+  "version": "0.0.1",
+  "description": "Personal task manager",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Atom1er/lydia.git"
+  },
+  "author": "thomas Minoungou",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Atom1er/lydia/issues"
+  },
+  "homepage": "https://github.com/Atom1er/lydia#readme",
+  "dependencies": {
+    "dotenv": "^8.1.0",
+    "env": "^0.0.2",
+    "express": "^4.17.1",
+    "express-server": "^0.7.0",
+    "msql": "^1.0.3",
+    "mysql2": "^1.7.0",
+    "nodemon": "^1.19.2",
+    "sass": "^1.22.12",
+    "sequelize": "^5.19.0",
+    "yarn": "^1.17.3"
+  },
+  "devDependencies": {
+    "@fortawesome/fontawesome-free": "^5.11.2"
+  }
+}
