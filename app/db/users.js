@@ -29,14 +29,14 @@ var user = con.define("users", {
             isEmail: true
         }
     },
-    password: {
+    userpassword: {
         type: Sequelize.STRING,
         allowNull: false
     },
     last_login: {
         type: Sequelize.DATE
     },
-    status: {
+    state: {
         type: Sequelize.ENUM('active', 'inactive'),
         defaultValue: 'active'
     }

@@ -20,6 +20,12 @@ $(document).ready(function () {
     });
 
     function ShowTask(groupes){
+        $.ajax({
+            type: "GET",
+            url: "/"
+        }).then(function (res) {
+
+        });
         var list = "<ul id='groupe-list'>"
         for(var i=0; i < groupes.length ; i++){
             //

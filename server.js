@@ -28,10 +28,23 @@ var task = {
     none: none
 };
 
+var user = {};
+
 app.post("/api/login", (req, res) => {
-    console.log(req.body);
-    isloggedIn = true;
-    res.send(isloggedIn);
+    user = {};
+    db_users.findOne({ 
+        where: {
+            username: req.body.un,
+            userpassword: req.body.upw
+        }}).then(user => {
+           user = user.dataValues;
+           isloggedIn = true;
+           res.send(isloggedIn);
+      }).catch(function (err) {
+        isloggedIn = false;
+        res.send(isloggedIn);
+      });
+
 });
 
 app.get("/api/login-check", (req, res) => {

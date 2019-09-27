@@ -5,7 +5,22 @@ ion-icon {
 
 nav {
   position: absolute;
-  top: 10vh;
+  top: 25px;
+  left: 10%;
+  background-color: #ffe4e4;
+  border-radius: 10px;
+  width: 80%;
+}
+
+footer {
+  position: absolute;
+  bottom: 25px;
+  left: 10%;
+  text-align: center;
+  background-color: #ffe4e4;
+  border-radius: 10px;
+  width: 80%;
+  height: 100px;
 }
 
 ul {
@@ -15,6 +30,13 @@ ul {
 
 ul li {
   display: inline-block;
+  margin: 0px 15px;
+  padding: 10px 5px 0px 5px;
+  color: #4b0000;
+}
+
+ul li:hover {
+  cursor: pointer;
 }
 
 .display-task {
@@ -65,6 +87,7 @@ ul li {
   padding: 20px 0px;
   border-bottom: rgba(202, 109, 124, 0.2) 1px solid;
   width: 100%;
+  color: black;
 }
 
 #task-nav #groupe-list li:hover {
@@ -84,6 +107,7 @@ ul li {
   padding: 20px 0px;
   border-bottom: rgba(255, 0, 43, 0.2) 1px solid;
   text-align: center;
+  color: black;
   width: 100%;
 }
 
@@ -95,21 +119,23 @@ ul li {
   border: 1px solid salmon;
   background-color: white;
   margin: 100px 20px 10px 20px;
+  height: 600px;
 }
 
 #groupe {
   margin-right: 0px;
   padding: 0px;
-  background-color: #ff2045;
+  height: 600px;
 }
 
 #task-list {
   background-color: #ff7088 !important;
   padding: 0px;
   margin-left: 0px;
-  height: 50vh;
+  height: 600px;
   width: 80%;
   overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 #task-list::-webkit-scrollbar {
@@ -138,5 +164,11 @@ ul li {
 .selected-groupe {
   text-decoration: underline;
   background-color: #ff7088 !important;
+}
+
+.ionicon-nav {
+  margin-right: 5px;
+  margin-left: 5px;
+  font-size: medium;
 }
 /*# sourceMappingURL=dash.css.map */
