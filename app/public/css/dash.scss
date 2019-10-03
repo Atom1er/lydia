@@ -162,6 +162,8 @@ background: #b30000;
     #priority, #due-date, #state, #author{
         border-bottom: rgba(255, 112, 136, 0.2) 1px solid;
         margin: 20px 15px;
+        padding: 10px;
+        text-align: center;
     }
     #priority{
         margin-top: 50px;

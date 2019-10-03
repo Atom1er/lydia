@@ -175,6 +175,8 @@ ul li:hover {
 #task-details #priority, #task-details #due-date, #task-details #state, #task-details #author {
   border-bottom: rgba(255, 112, 136, 0.2) 1px solid;
   margin: 20px 15px;
+  padding: 10px;
+  text-align: center;
 }
 
 #task-details #priority {

@@ -11,17 +11,38 @@ $(document).ready(function () {
         url: url
     }).then(function (res) {
         isloggedIn = res.isloggedIn;
-        groupe = res.groupe;
-        task = res.data.tasks;
-        uc.n = res.data.username;
-        uc.pw = res.data.pw;
         if (isloggedIn) {
-            console.log("res is " + res.isloggedIn);
+            groupe = res.groupe;
+            task = res.data.tasks;
+            uc.n = res.data.username;
+            uc.pw = res.data.pw;
+            sessionStorage.setItem('n', uc.n);
+            sessionStorage.setItem('pw', uc.pw);
             ShowTask(groupe);
-        } else {
-            window.location.href = './index.html';
         }
     });
+
+    if (!isloggedIn) {
+        uc.n = sessionStorage.getItem('n');
+        uc.pw = sessionStorage.getItem('pw');
+        var data = {
+            un: uc.n,
+            upw: uc.pw
+        }
+        console.log(uc);
+        $.ajax({
+            type: "POST",
+            url: "/api/login",
+            data: data
+        }).then(function (res) {
+            isloggedIn = res;
+            if (!isloggedIn) {
+                window.location.href = './index.html';
+            }
+        });
+    }
+
+
 
     var school = [];
     var house = [];
@@ -102,32 +123,32 @@ $(document).ready(function () {
         })
     });
 
-    $("#create-task").on('click', function(){
+    $("#create-task").on('click', function () {
         console.log("clicked");
     });
 
-    $('#save-n-task').on('click', function() {
+    $('#save-ed-task').on('click', function () {
         var n_task = {};
-        n_task.taskTitle = $("#n-title").val();
-        n_task.groupe = $("#n-groupe").val();
-        n_task.assignedTo = $("#n-assigned-to").val();
-        n_task.dueDate = $("#n-due-date").val()+"T00:00:00.000Z";
+        n_task.taskTitle = $("#ed-title").val();
+        n_task.groupe = $("#ed-groupe").val();
+        n_task.assignedTo = $("#ed-assigned-to").val();
+        n_task.dueDate = $("#ed-due-date").val() + "T00:00:00.000Z";
         n_task.dateOfCreation = new Date().toISOString();
         n_task.creator = uc.n;
         n_task.state = "To Do";
-        n_task.taskBody = $("#n-body").val();
+        n_task.taskBody = $("#ed-body").val();
         n_task.priority = "Medium";
 
-        if($("#n-high")[0].checked){
+        if ($("#ed-high")[0].checked) {
             n_task.priority = "High";
-        }else if($("#n-low")[0].checked){
+        } else if ($("#ed-low")[0].checked) {
             n_task.priority = "Low";
         }
-        if(n_task.assignedTo == ""){
+        if (n_task.assignedTo == "") {
             n_task.assignedTo = uc.n;
         }
         n_task.uc = uc;
-        
+
         console.log(n_task);
         var url = "/api/new-task";
         $.ajax({
@@ -139,6 +160,42 @@ $(document).ready(function () {
                 window.location.href = "./index.html"
             }
             console.log(res);
+        })
+
+    });
+
+    $('#save-n-task').on('click', function () {
+        var n_task = {};
+        n_task.taskTitle = $("#n-title").val();
+        n_task.groupe = $("#n-groupe").val();
+        n_task.assignedTo = $("#n-assigned-to").val();
+        n_task.dueDate = $("#n-due-date").val() + "T00:00:00.000Z";
+        n_task.dateOfCreation = new Date().toISOString();
+        n_task.creator = uc.n;
+        n_task.state = "To Do";
+        n_task.taskBody = $("#n-body").val();
+        n_task.priority = "Medium";
+
+        if ($("#n-high")[0].checked) {
+            n_task.priority = "High";
+        } else if ($("#n-low")[0].checked) {
+            n_task.priority = "Low";
+        }
+        if (n_task.assignedTo == "") {
+            n_task.assignedTo = uc.n;
+        }
+        n_task.uc = uc;
+
+        console.log(n_task);
+        var url = "/api/new-task";
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: n_task
+        }).then(function (res) {
+            if (res == true) {
+                $("#createTaskModal").modal('hide');
+            }
         })
 
     });

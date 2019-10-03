@@ -50,6 +50,7 @@ function login(uc){
 
 app.post("/api/new-task", (req, res) => {
     var isIn = res;
+    var response;
     if(isIn){
         db_tasks.create({
             dateOfCreation: req.body.dateOfCreation,
@@ -62,8 +63,8 @@ app.post("/api/new-task", (req, res) => {
             state: req.body.state,
             groupe: req.body.groupe
         }).then((results) => {
-            res = false;
-            res.send(results);
+            response = false;
+            res.send(!response);
         });
     } else{
         res.send("Not Authorized");
