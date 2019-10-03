@@ -155,8 +155,79 @@ background: #b30000;
     background-color: rgb(255, 112, 136) !important;
 }
 
+#task-details{
+    background-color: rgb(253, 192, 202) !important;
+    height: 600px;
+    padding-left: 20px;
+    #priority, #due-date, #state, #author{
+        border-bottom: rgba(255, 112, 136, 0.2) 1px solid;
+        margin: 20px 15px;
+    }
+    #priority{
+        margin-top: 50px;
+    }
+    #creator{
+        display: block;
+    }
+    #assigned-to{
+        display: block;
+    }
+}
+
 .ionicon-nav{
     margin-right: 5px;
     margin-left: 5px;
     font-size: medium;
+}
+
+#task-body{
+    margin: 50px 15px 15px 15px;
+}
+
+.task-el:hover{
+    cursor: pointer;
+}
+
+.t-high{
+    background-color: rgb(168, 0, 0);
+    color: white;
+}
+
+.t-medium{
+    background-color: rgb(177, 177, 0);
+    color: white;
+}
+
+.t-low{
+    background-color: rgb(0, 102, 0);
+    color: white;
+}
+
+.t-to-do{
+    background-color: rgb(168, 0, 0);
+    color: white;
+}
+
+.t-in-progress{
+    background-color: rgb(177, 177, 0);
+    color: white;
+}
+
+.t-done{
+    background-color: rgb(0, 102, 0);
+    color: white;
+}
+
+.edit > ion-icon{
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 25px;
+}
+.edit > ion-icon:hover{
+    cursor: pointer;
+}
+
+#createTask-modal-body{
+    padding: 0px 20px;
 }

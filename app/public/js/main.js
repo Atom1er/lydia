@@ -8,6 +8,7 @@ $(document).ready(function(){
             un: usern,
             upw: upw
         };
+        console.log("data: ",data)
         var url = "/api/login";
 
         $.ajax({

@@ -2,15 +2,19 @@ $(document).ready(function () {
     var isloggedIn = false;
     var groupe = [];
     var task;
+    var uc = {};
+    var selectedTask;
+
     var url = "/api/login-check";
     $.ajax({
         type: "GET",
         url: url
     }).then(function (res) {
-        console.log(res.groupe);
         isloggedIn = res.isloggedIn;
         groupe = res.groupe;
-        task = res.task;
+        task = res.data.tasks;
+        uc.n = res.data.username;
+        uc.pw = res.data.pw;
         if (isloggedIn) {
             console.log("res is " + res.isloggedIn);
             ShowTask(groupe);
@@ -19,92 +23,265 @@ $(document).ready(function () {
         }
     });
 
-    function ShowTask(groupes){
-        $.ajax({
-            type: "GET",
-            url: "/"
-        }).then(function (res) {
+    var school = [];
+    var house = [];
+    var legal = [];
+    var hobbies = [];
+    var general = [];
+    var taskGroupe = {};
 
-        });
-        var list = "<ul id='groupe-list'>"
-        for(var i=0; i < groupes.length ; i++){
-            //
-            switch(groupes[i]){
+    function ShowTask(groupes) {
+        task.forEach(t => {
+            switch (t.groupe) {
                 case 'School':
-                list += "<li value="+groupes[i]+" class='grp-el' id="+groupes[i].toLowerCase()+"><ion-icon name='school'></ion-icon>"+groupes[i]+"</li>"
-                break
+                    school.push(t);
+                    break
                 case 'House':
-                list += "<li value="+groupes[i]+" class='grp-el' id="+groupes[i].toLowerCase()+"><ion-icon name='home'></ion-icon>"+groupes[i]+"</li>"
-                break;
+                    house.push(t);
+                    break
                 case 'Legal':
-                list += "<li value="+groupes[i]+" class='grp-el' id="+groupes[i].toLowerCase()+"><ion-icon name='bookmarks'></ion-icon>"+groupes[i]+"</li>"
-                break;
+                    legal.push(t);
+                    break
                 case 'Hobbies':
-                list += "<li value="+groupes[i]+" class='grp-el' id="+groupes[i].toLowerCase()+"><ion-icon name='wine'></ion-icon>"+groupes[i]+"</li>"
-                break;
-                case 'None':
-                list += "<li value="+groupes[i]+" class='grp-el' id="+groupes[i].toLowerCase()+"><ion-icon name='list-box'></ion-icon>"+groupes[i]+"</li>"
-                break;
+                    hobbies.push(t);
+                    break
+                case 'General':
+                    general.push(t);
+                    break
+                default:
+                    general.push(t);
+                    break
             }
-            
+        });
+
+        taskGroupe = {
+            school: school,
+            house: house,
+            legal: legal,
+            hobbies: hobbies,
+            general: general
+        };
+
+        console.log("taskGroupe: ", taskGroupe);
+        var list = "<ul id='groupe-list'>"
+        for (var i = 0; i < groupes.length; i++) {
+            //
+            switch (groupes[i]) {
+                case 'School':
+                    list += "<li value=" + groupes[i] + " class='grp-el' id=" + groupes[i].toLowerCase() + "><ion-icon name='school'></ion-icon>" + groupes[i] + "</li>"
+                    break
+                case 'House':
+                    list += "<li value=" + groupes[i] + " class='grp-el' id=" + groupes[i].toLowerCase() + "><ion-icon name='home'></ion-icon>" + groupes[i] + "</li>"
+                    break;
+                case 'Legal':
+                    list += "<li value=" + groupes[i] + " class='grp-el' id=" + groupes[i].toLowerCase() + "><ion-icon name='bookmarks'></ion-icon>" + groupes[i] + "</li>"
+                    break;
+                case 'Hobbies':
+                    list += "<li value=" + groupes[i] + " class='grp-el' id=" + groupes[i].toLowerCase() + "><ion-icon name='wine'></ion-icon>" + groupes[i] + "</li>"
+                    break;
+                case 'General':
+                    list += "<li value=" + groupes[i] + " class='grp-el' id=" + groupes[i].toLowerCase() + "><ion-icon name='list-box'></ion-icon>" + groupes[i] + "</li>"
+                    break;
+            }
+
         }
         list += "</ul>";
         $("#groupe").html(list);
     }
 
-    $(document).on('click', '.grp-el', function(){
+    $("#log-out").on('click', function () {
+        var url = "/api/logout";
+        $.ajax({
+            type: "GET",
+            url: url
+        }).then(function (res) {
+            if (res == true) {
+                window.location.href = "./index.html"
+            }
+            console.log(res);
+        })
+    });
+
+    $("#create-task").on('click', function(){
+        console.log("clicked");
+    });
+
+    $('#save-n-task').on('click', function() {
+        var n_task = {};
+        n_task.taskTitle = $("#n-title").val();
+        n_task.groupe = $("#n-groupe").val();
+        n_task.assignedTo = $("#n-assigned-to").val();
+        n_task.dueDate = $("#n-due-date").val()+"T00:00:00.000Z";
+        n_task.dateOfCreation = new Date().toISOString();
+        n_task.creator = uc.n;
+        n_task.state = "To Do";
+        n_task.taskBody = $("#n-body").val();
+        n_task.priority = "Medium";
+
+        if($("#n-high")[0].checked){
+            n_task.priority = "High";
+        }else if($("#n-low")[0].checked){
+            n_task.priority = "Low";
+        }
+        if(n_task.assignedTo == ""){
+            n_task.assignedTo = uc.n;
+        }
+        n_task.uc = uc;
+        
+        console.log(n_task);
+        var url = "/api/new-task";
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: n_task
+        }).then(function (res) {
+            if (res == true) {
+                window.location.href = "./index.html"
+            }
+            console.log(res);
+        })
+
+    });
+
+    $(document).on('click', '.grp-el', function () {
         document.getElementById("school").classList.remove("selected-groupe");
         document.getElementById("house").classList.remove("selected-groupe");
         document.getElementById("legal").classList.remove("selected-groupe");
         document.getElementById("hobbies").classList.remove("selected-groupe");
-        document.getElementById("none").classList.remove("selected-groupe");
+        document.getElementById("general").classList.remove("selected-groupe");
         var val = $(this).text();
-        switch (val){
+        switch (val) {
             case 'School':
                 document.getElementById("school").classList.add("selected-groupe");
                 var ul = "<ul id='task-ls'>"
-                for(var i=0; i < task.school.length ; i++){
-                    ul += "<li value="+task.school[i]+" class='task-el'>"+task.school[i]+"</li>"
+                if (taskGroupe.school.length > 0) {
+                    for (var i = 0; i < taskGroupe.school.length; i++) {
+                        ul += "<li value='School-" + i + "' class='task-el'>" + taskGroupe.school[i].taskTitle + "</li>"
+                    }
+                } else {
+                    ul += "<li value='School-none' class='null'>No task for this Groupe!</li>"
                 }
+
                 ul += "</ul>"
                 $("#task-list").html(ul);
-            break;
+                break;
             case 'House':
                 document.getElementById("house").classList.add("selected-groupe");
                 var ul = "<ul id='task-ls'>"
-                for(var i=0; i < task.house.length ; i++){
-                    ul += "<li value="+task.house[i]+" class='task-el'>"+task.house[i]+"</li>"
+                if (taskGroupe.house.length > 0) {
+                    for (var i = 0; i < taskGroupe.house.length; i++) {
+                        ul += "<li value='House-" + i + "' class='task-el'>" + taskGroupe.house[i].taskTitle + "</li>"
+                    }
+                } else {
+                    ul += "<li value='School-none' class='null'>No task for this Groupe!</li>"
                 }
+
                 ul += "</ul>"
                 $("#task-list").html(ul);
-            break;
+                break;
             case 'Legal':
                 document.getElementById("legal").classList.add("selected-groupe");
                 var ul = "<ul id='task-ls'>"
-                for(var i=0; i < task.legal.length ; i++){
-                    ul += "<li value="+task.legal[i]+" class='task-el'>"+task.legal[i]+"</li>"
+                if (taskGroupe.legal.length > 0) {
+                    for (var i = 0; i < taskGroupe.legal.length; i++) {
+                        ul += "<li value='Legal-" + i + "' class='task-el'>" + taskGroupe.legal[i].taskTitle + "</li>"
+                    }
+                } else {
+                    ul += "<li value='School-none' class='null'>No task for this Groupe!</li>"
                 }
+
                 ul += "</ul>"
                 $("#task-list").html(ul);
-            break;
+                break;
             case 'Hobbies':
                 document.getElementById("hobbies").classList.add("selected-groupe");
                 var ul = "<ul id='task-ls'>"
-                for(var i=0; i < task.hobbies.length ; i++){
-                    ul += "<li value="+task.hobbies[i]+" class='task-el'>"+task.hobbies[i]+"</li>"
+                if (taskGroupe.hobbies.length > 0) {
+                    for (var i = 0; i < taskGroupe.hobbies.length; i++) {
+                        ul += "<li value='Hobbies-" + i + "' class='task-el'>" + taskGroupe.hobbies[i].taskTitle + "</li>"
+                    }
+
+                } else {
+                    ul += "<li value='School-none' class='null'>No task for this Groupe!</li>"
                 }
                 ul += "</ul>"
                 $("#task-list").html(ul);
-            break;
-            case 'None':
-                document.getElementById("none").classList.add("selected-groupe");
+                break;
+            case 'General':
+                document.getElementById("general").classList.add("selected-groupe");
                 var ul = "<ul id='task-ls'>"
-                for(var i=0; i < task.none.length ; i++){
-                    ul += "<li value="+task.none[i]+" class='task-el'>"+task.none[i]+"</li>"
+                if (taskGroupe.general.length > 0) {
+                    for (var i = 0; i < taskGroupe.general.length; i++) {
+                        ul += "<li value='General-" + i + "' class='task-el'>" + taskGroupe.general[i].taskTitle + "</li>"
+                    }
+
+                } else {
+                    ul += "<li value='School-none' class='null'>No task for this Groupe!</li>"
                 }
                 ul += "</ul>"
                 $("#task-list").html(ul);
-            break;
+                break;
         }
-    })
+    });
+
+    function taskDisplay(groupe) {
+        var dDate = groupe.dueDate.split("T")[0].split("-").reverse().join("/");
+        $("#priority").html("<span> Priority: " + groupe.priority + "</span>");
+        $("#due-date").html("<span> Due date: " + dDate + "</span>");
+        $("#state").html("<span> Status: " + groupe.state + "</span>");
+        $("#creator").html("<span> By " + groupe.creator + "</span>");
+        $("#assigned-to").html("<span> Assigned to " + groupe.assignedTo + "</span>");
+        $("#task-body").html("<span>" + groupe.taskBody + "</span>");
+        switch (groupe.priority) {
+            case 'High':
+                $("#priority").attr('class', 't-high');
+                break;
+            case 'Medium':
+                $("#priority").attr('class', 't-medium');
+                break;
+            case 'Low':
+                $("#priority").attr('class', 't-low');
+                break;
+        }
+        switch (groupe.state) {
+            case 'To Do':
+                $("#state").attr('class', 't-to-do');
+                break;
+            case 'In Progress':
+                $("#state").attr('class', 't-in-progress');
+                break;
+            case 'Done':
+                $("#state").attr('class', 't-done');
+                break;
+        }
+    }
+
+    $(document).on('click', '.task-el', function () {
+        $(".task-el").css({ 'background-color': 'rgb(255, 112, 136)' });
+        $(this).css({ 'background-color': 'rgb(253, 192, 202)' });
+        selectedTask = $(this).attr('value').split('-');
+        var value = $(this).attr('value').split('-');
+        var groupe = value[0];
+        var i = value[1];
+
+        switch (groupe) {
+            case 'School':
+                taskDisplay(taskGroupe.school[i]);
+                break;
+            case 'House':
+                taskDisplay(taskGroupe.house[i]);
+                break;
+            case 'Legal':
+                taskDisplay(taskGroupe.legal[i]);
+                break;
+            case 'Hobbies':
+                taskDisplay(taskGroupe.hobbies[i]);
+                break;
+            case 'General':
+                taskDisplay(taskGroupe.general[i]);
+                break;
+
+        }
+
+    });
 });

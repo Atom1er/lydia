@@ -166,9 +166,85 @@ ul li:hover {
   background-color: #ff7088 !important;
 }
 
+#task-details {
+  background-color: #fdc0ca !important;
+  height: 600px;
+  padding-left: 20px;
+}
+
+#task-details #priority, #task-details #due-date, #task-details #state, #task-details #author {
+  border-bottom: rgba(255, 112, 136, 0.2) 1px solid;
+  margin: 20px 15px;
+}
+
+#task-details #priority {
+  margin-top: 50px;
+}
+
+#task-details #creator {
+  display: block;
+}
+
+#task-details #assigned-to {
+  display: block;
+}
+
 .ionicon-nav {
   margin-right: 5px;
   margin-left: 5px;
   font-size: medium;
+}
+
+#task-body {
+  margin: 50px 15px 15px 15px;
+}
+
+.task-el:hover {
+  cursor: pointer;
+}
+
+.t-high {
+  background-color: #a80000;
+  color: white;
+}
+
+.t-medium {
+  background-color: #b1b100;
+  color: white;
+}
+
+.t-low {
+  background-color: #006600;
+  color: white;
+}
+
+.t-to-do {
+  background-color: #a80000;
+  color: white;
+}
+
+.t-in-progress {
+  background-color: #b1b100;
+  color: white;
+}
+
+.t-done {
+  background-color: #006600;
+  color: white;
+}
+
+.edit > ion-icon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 25px;
+}
+
+.edit > ion-icon:hover {
+  cursor: pointer;
+}
+
+#createTask-modal-body {
+  padding: 0px 20px;
 }
 /*# sourceMappingURL=dash.css.map */
