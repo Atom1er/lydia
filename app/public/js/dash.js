@@ -148,7 +148,7 @@ $(document).ready(function () {
             n_task.assignedTo = uc.n;
         }
         n_task.uc = uc;
-
+        $(".loading2").css('visibility', 'visible');
         console.log(n_task);
         var url = "/api/new-task";
         $.ajax({
@@ -157,7 +157,10 @@ $(document).ready(function () {
             data: n_task
         }).then(function (res) {
             if (res == true) {
-                window.location.href = "./index.html"
+                // window.location.href = "./index.html"
+                $(".loading2").css('visibility', 'hidden');
+                $("#editTaskModal").modal('hide');
+                location.reload();
             }
             console.log(res);
         })
@@ -185,7 +188,8 @@ $(document).ready(function () {
             n_task.assignedTo = uc.n;
         }
         n_task.uc = uc;
-
+        
+        $(".loading1").css('visibility', 'visible');
         console.log(n_task);
         var url = "/api/new-task";
         $.ajax({
@@ -194,7 +198,9 @@ $(document).ready(function () {
             data: n_task
         }).then(function (res) {
             if (res == true) {
+                $(".loading1").css('visibility', 'hidden');
                 $("#createTaskModal").modal('hide');
+                location.reload();
             }
         })
 
@@ -313,6 +319,24 @@ $(document).ready(function () {
         }
     }
 
+    function editPrepar(groupe, cat){
+        // $("#editTaskModal").modal('show');
+        var dDate = groupe.dueDate.split("T")[0].split("-").reverse().join("/");
+        console.log(groupe, cat);
+        $("#ed-title").val(groupe.taskTitle);
+        $("#ed-groupe").val(cat);
+        $("#ed-assigned-to").val(groupe.assignedTo);
+        $("#ed-due-date").val(dDate);
+        $("#ed-body").val(groupe.taskBody);
+        if(groupe.priority == "Medium"){
+            $("#ed-medium")[0].checked = true;
+        }else if(groupe.priority == "High"){
+            $("#ed-high")[0].checked = true;
+        } else if(groupe.priority == "Low"){
+            $("#ed-low")[0].checked = true;
+        }
+    }
+
     $(document).on('click', '.task-el', function () {
         $(".task-el").css({ 'background-color': 'rgb(255, 112, 136)' });
         $(this).css({ 'background-color': 'rgb(253, 192, 202)' });
@@ -324,18 +348,23 @@ $(document).ready(function () {
         switch (groupe) {
             case 'School':
                 taskDisplay(taskGroupe.school[i]);
+                editPrepar(taskGroupe.school[i], 'School');
                 break;
             case 'House':
                 taskDisplay(taskGroupe.house[i]);
+                editPrepar(taskGroupe.house[i], 'House');
                 break;
             case 'Legal':
                 taskDisplay(taskGroupe.legal[i]);
+                editPrepar(taskGroupe.legal[i], 'Legal');
                 break;
             case 'Hobbies':
                 taskDisplay(taskGroupe.hobbies[i]);
+                editPrepar(taskGroupe.hobbies[i], 'Hobbies');
                 break;
             case 'General':
                 taskDisplay(taskGroupe.general[i]);
+                editPrepar(taskGroupe.general[i], 'General');
                 break;
 
         }
