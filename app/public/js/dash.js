@@ -112,6 +112,8 @@ $(document).ready(function () {
 
     $("#log-out").on('click', function () {
         var url = "/api/logout";
+        sessionStorage.removeItem('n');
+        sessionStorage.removeItem('pw');
         $.ajax({
             type: "GET",
             url: url

@@ -80,10 +80,10 @@ app.post("/api/login", (req, res) => {
             userpassword: req.body.upw
         }
     }).then(user => {
-        console.log("user", user.dataValues);
+        console.log("user", user);
         isloggedIn = true;
-        dt.username = user.dataValues.username;
-        dt.pw = user.dataValues.userpassword;
+        dt.username = user.username;
+        dt.pw = user.userpassword;
         dataTable(dt.username, isloggedIn);
         res.send(isloggedIn);
     }).catch(function (err) {
